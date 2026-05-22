@@ -16,6 +16,7 @@ import GeneralTab from "../components/dashboard/GeneralTab";
 import ProjectsTab from "../components/dashboard/ProjectsTab";
 import SkillsTab from "../components/dashboard/SkillsTab";
 import BlogsTab from "../components/dashboard/BlogsTab";
+import MessagesTab from "../components/dashboard/MessagesTab";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("general");
@@ -59,8 +60,8 @@ export default function Dashboard() {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const cloudName = "dshvhd37f"; // Replace this
-    const uploadPreset = "aranyhasan"; // Replace this
+    const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", uploadPreset);
@@ -122,6 +123,9 @@ export default function Dashboard() {
           <SkillsTab skills={skills} fetchAllData={fetchAllData} />
         )}
         {activeTab === "blogs" && <BlogsTab fetchAllData={fetchAllData} />}
+
+        {/* ইনকোয়ারি ট্যাব রেন্ডার করা */}
+        {activeTab === "inquiries" && <MessagesTab />}
       </main>
     </div>
   );
