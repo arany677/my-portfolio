@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0F172A;
+  --color-secondary: #1E293B;
+  --color-accent: #22D3EE;
+  --color-slate-custom: #94A3B8;
+}
+
+body {
+  background-color: var(--color-primary);
+  color: #E2E8F0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* প্রফেশনাল স্ক্রলবার */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0F172A; }
+::-webkit-scrollbar-thumb { 
+  background: #1E293B; 
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover { background: #22D3EE; }
