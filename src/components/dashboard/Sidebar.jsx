@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-import { db, auth } from "../../firebase";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
 import {
   User,
   Info,
@@ -10,7 +7,7 @@ import {
   MessageSquare,
   LogOut,
   Home,
-  LayoutDashboard,
+  X,
 } from "lucide-react";
 
 export default function Sidebar({
@@ -18,87 +15,76 @@ export default function Sidebar({
   setActiveTab,
   handleLogout,
   navigate,
+  isOpen,
+  setIsOpen,
 }) {
-  const [unreadCount, setUnreadCount] = useState(0);
-
-  // ১. রিয়েল-টাইম আনরিড মেসেজ চেক করা (নোটিফিকেশন ব্যাজের জন্য)
-  useEffect(() => {
-    const q = query(collection(db, "messages"), where("isRead", "==", false));
-
-    // onSnapshot ব্যবহার করায় ডাটাবেসে মেসেজ আসার সাথে সাথে সংখ্যা আপডেট হবে
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setUnreadCount(snapshot.size);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  // মেনু আইটেমগুলোর লিস্ট
   const menuItems = [
-    { id: "general", label: "General", icon: <User size={20} /> },
-    { id: "about", label: "About Me", icon: <Info size={20} /> },
-    { id: "projects", label: "Projects", icon: <Briefcase size={20} /> },
-    { id: "skills", label: "Skills", icon: <Code size={20} /> },
-    { id: "blogs", label: "Blogs", icon: <FileText size={20} /> },
-    { id: "inquiries", label: "Inquiries", icon: <MessageSquare size={20} /> },
+    { id: "general", label: "General", icon: <User size={18} /> },
+    { id: "about", label: "About Me", icon: <Info size={18} /> },
+    { id: "projects", label: "Projects", icon: <Briefcase size={18} /> },
+    { id: "skills", label: "Skills", icon: <Code size={18} /> },
+    { id: "blogs", label: "Blogs", icon: <FileText size={18} /> },
+    { id: "inquiries", label: "Inquiries", icon: <MessageSquare size={18} /> },
+    { id: "resume", label: "Resume", icon: <FileText size={20} /> },
   ];
 
   return (
-    <aside className="w-64 bg-[#1E293B] border-r border-slate-700 flex flex-col fixed h-full z-50 shadow-2xl">
-      {/* লোগো অংশ */}
-      <div className="p-8 flex items-center gap-3 border-b border-slate-700 bg-[#1e293b]">
-        <div className="bg-cyan-400 p-2 rounded-lg">
-          <LayoutDashboard size={20} className="text-[#0F172A]" />
-        </div>
-        <span className="text-xl font-black text-white tracking-tighter uppercase italic">
-          Admin<span className="text-cyan-400">.</span>
-        </span>
-      </div>
+    <>
+      {/* মোবাইল ব্যাকড্রপ (মেনু খুললে পেছনের অংশ কালো হবে) */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-[50] md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
 
-      {/* নেভিগেশন লিঙ্কসমূহ */}
-      <nav className="flex-grow p-4 space-y-2 mt-4 overflow-y-auto custom-scrollbar">
-        {menuItems.map((item) => (
+      {/* সাইডবার বডি */}
+      <aside
+        className={`fixed top-0 left-0 h-full w-64 bg-[#1E293B] border-r border-white/5 z-[60] flex flex-col transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+      >
+        {/* হেডার */}
+        <div className="p-6 border-b border-white/5 flex justify-between items-center">
+          <span className="text-xl font-black text-cyan-400 italic">
+            ADMIN.
+          </span>
           <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id)}
-            className={`relative w-full flex items-center gap-4 p-4 rounded-xl font-bold transition-all duration-300 group ${
-              activeTab === item.id
-                ? "bg-cyan-400 text-[#0F172A] shadow-[0_0_20px_rgba(34,211,238,0.2)]"
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
-            }`}
+            onClick={() => setIsOpen(false)}
+            className="md:hidden text-slate-400"
           >
-            {item.icon}
-            <span className="text-sm tracking-wide">{item.label}</span>
-
-            {/* ইনকোয়ারি ট্যাবে নোটিফিকেশন ব্যাজ দেখানো */}
-            {item.id === "inquiries" && unreadCount > 0 && (
-              <span className="absolute right-4 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full animate-bounce shadow-lg border-2 border-[#1E293B]">
-                {unreadCount}
-              </span>
-            )}
+            <X size={24} />
           </button>
-        ))}
+        </div>
 
-        {/* সাইট ভিজিট করার বাটন */}
-        <div className="pt-4 mt-6 border-t border-slate-700">
+        {/* নেভিগেশন */}
+        <nav className="flex-grow p-4 space-y-1 overflow-y-auto pt-6">
+          {menuItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`w-full flex items-center gap-4 p-4 rounded-2xl font-bold transition-all ${activeTab === item.id ? "bg-cyan-400 text-[#0F172A]" : "text-slate-400 hover:text-white hover:bg-slate-800"}`}
+            >
+              {item.icon} <span className="text-sm">{item.label}</span>
+            </button>
+          ))}
+
           <button
             onClick={() => navigate("/")}
-            className="w-full flex items-center gap-3 p-3 rounded-xl text-slate-500 hover:text-cyan-400 transition-all font-mono text-[10px] uppercase tracking-[3px]"
+            className="w-full flex items-center gap-3 p-4 rounded-xl text-slate-500 hover:text-white mt-4 border-t border-white/5 pt-6 font-mono text-[10px] uppercase"
           >
             <Home size={16} /> View Website
           </button>
-        </div>
-      </nav>
+        </nav>
 
-      {/* লগআউট বাটন (একদম নিচে ফিক্সড) */}
-      <div className="p-4 border-t border-slate-700 bg-[#1E293B]">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-3 p-4 bg-red-600/10 text-red-500 font-black rounded-xl hover:bg-red-600 hover:text-white transition-all duration-300 uppercase text-xs tracking-widest border border-red-500/20"
-        >
-          <LogOut size={18} /> Logout Now
-        </button>
-      </div>
-    </aside>
+        {/* লগআউট */}
+        <div className="p-4 border-t border-white/5">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-3 p-4 bg-red-600/10 text-red-500 font-bold rounded-2xl hover:bg-red-600 hover:text-white transition-all text-xs"
+          >
+            <LogOut size={18} /> LOGOUT NOW
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }

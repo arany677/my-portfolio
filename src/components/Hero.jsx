@@ -1,5 +1,6 @@
 import { Typewriter } from "react-simple-typewriter";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom"; // Link ইম্পোর্ট করুন
 
 export default function Hero({ data }) {
   return (
@@ -13,7 +14,6 @@ export default function Hero({ data }) {
           Hello, I am
         </p>
 
-        {/* মোবাইলে text-4xl আর বড় স্ক্রিনে text-8xl */}
         <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-white mb-4 leading-tight">
           {data?.name || "Arany Hasan"}
           <span className="text-cyan-400">.</span>
@@ -34,19 +34,14 @@ export default function Hero({ data }) {
             "Building high-quality web applications with passion and precision."}
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4">
-          <a
-            href="#projects"
-            className="px-8 py-4 bg-cyan-400 text-[#0F172A] font-black rounded-xl text-center hover:scale-105 transition-all"
+        <div className="flex">
+          {/* শুধু একটি বাটন এবং এটি Projects পেজে নিয়ে যাবে */}
+          <Link
+            to="/projects"
+            className="px-10 py-4 bg-cyan-400 text-[#0F172A] font-black rounded-xl text-center hover:shadow-[0_0_20px_rgba(34,211,238,0.4)] transition-all uppercase tracking-widest"
           >
-            VIEW PROJECTS
-          </a>
-          <a
-            href="#contact"
-            className="px-8 py-4 border border-white/10 text-white font-black rounded-xl text-center hover:bg-white/5 transition-all"
-          >
-            CONTACT ME
-          </a>
+            View My Projects
+          </Link>
         </div>
       </motion.div>
     </section>

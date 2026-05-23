@@ -19,11 +19,11 @@ import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-
+import Resume from "./pages/Resume";
 // ড্যাশবোর্ড এবং লগইন পেজে নববার হাইড করার লজিক
 const Layout = ({ children }) => {
   const location = useLocation();
-  const hideItems = ["/dashboard", "/login"];
+  const hideItems = ["/dashboard", "/login" ];
   const shouldHide = hideItems.includes(location.pathname);
 
   return (
@@ -61,6 +61,7 @@ export default function App() {
             <Route path="/blog" element={<Blog />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/resume" element={<Resume />} />
             <Route
               path="/dashboard"
               element={
