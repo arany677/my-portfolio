@@ -20,6 +20,9 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Resume from "./pages/Resume";
+import ScrollToTop from "./components/ScrollToTop";
+import ProjectDetails from "./pages/ProjectDetails";
+
 // ড্যাশবোর্ড এবং লগইন পেজে নববার হাইড করার লজিক
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -51,6 +54,7 @@ const ProtectedRoute = ({ children }) => {
 export default function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="bg-[#0F172A]">
         <Layout>
           <Routes>
@@ -62,6 +66,7 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/resume" element={<Resume />} />
+            <Route path="/project/:id" element={<ProjectDetails />} />
             <Route
               path="/dashboard"
               element={
